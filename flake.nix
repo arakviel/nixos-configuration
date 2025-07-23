@@ -63,7 +63,7 @@
                       name = "root";
                       part-type = "primary";
                       start = "1GiB";
-                      end = "51GiB";
+                      end = "-4GiB"; # Залишаємо 4 ГБ для swap
                       fs-type = "ext4";
                       content = {
                         type = "filesystem";
@@ -74,22 +74,10 @@
                     {
                       name = "swap";
                       part-type = "primary";
-                      start = "51GiB";
-                      end = "55GiB";
+                      start = "-4GiB";
+                      end = "100%";
                       content = {
                         type = "swap";
-                      };
-                    }
-                    {
-                      name = "home";
-                      part-type = "primary";
-                      start = "55GiB";
-                      end = "100%";
-                      fs-type = "ext4";
-                      content = {
-                        type = "filesystem";
-                        format = "ext4";
-                        mountpoint = "/home";
                       };
                     }
                   ];

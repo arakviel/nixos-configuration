@@ -1,0 +1,19 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: global-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Password123$
+      MYSQL_DATABASE: defaultdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - global-network
+volumes:
+  mysqldata:
+networks:
+  global-network:
+    name: global-network

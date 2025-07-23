@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: global-postgres
+    environment:
+      POSTGRES_PASSWORD: Password123$
+      POSTGRES_USER: postgres
+      POSTGRES_DB: defaultdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - global-network
+volumes:
+  pgdata:
+networks:
+  global-network:
+    name: global-network

@@ -1,0 +1,19 @@
+# Системні та кеш-файли
+result/
+*.iso
+*.qcow2
+*.img
+*.vdi
+*.ova
+*.log
+.cache/
+*.swp
+*.tmp
+*.bak
+
+# Nix
+.nix-gc/
+.nix-defexpr/
+.nix-channels/
+.nix-profile/
+.nix-store/

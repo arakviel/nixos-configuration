@@ -1,0 +1,20 @@
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: global-mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123$
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+    restart: unless-stopped
+    networks:
+      - global-network
+volumes:
+  mssqldata:
+networks:
+  global-network:
+    name: global-network

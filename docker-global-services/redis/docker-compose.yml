@@ -1,0 +1,16 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: global-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    restart: unless-stopped
+    networks:
+      - global-network
+volumes:
+  redisdata:
+networks:
+  global-network:
+    name: global-network

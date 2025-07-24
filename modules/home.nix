@@ -29,16 +29,19 @@
 
     # Office Suite
     onlyoffice-bin
+
+    # Terminal Emulator
+    kitty
   ];
 
   # GNOME extensions and keyboard layout settings
   dconf.settings = {
     "org/gnome/shell" = {
-      enabled-extensions = with pkgs; [
-        gnomeExtensions.dash-to-dock.extensionUuid
-        gnomeExtensions.appindicator.extensionUuid
-        gnomeExtensions.blur-my-shell.extensionUuid
-        gnomeExtensions.user-themes.extensionUuid
+      enabled-extensions = [
+        "dash-to-dock@micxgx.gmail.com"
+        "appindicator@ubuntu.com"
+        "blur-my-shell@aunetx"
+        "user-theme@gnome-shell-extensions.gcampax.github.com"
       ];
     };
     "org/gnome/desktop/input-sources" = {
@@ -72,4 +75,50 @@
       safe.directory = "*";
     };
   };
+
+  # Declarative Kitty configuration
+  programs.kitty = {
+    enable = true;
+    font = {
+      name = "JetBrains Mono Nerd Font";
+      size = 11.0;
+    };
+    settings = {
+      # Cursor settings
+      "cursor_shape" = "beam";
+      "cursor_trail" = "1";
+
+      # Padding (why weird value? consistency with foot)
+      "window_margin_width" = "21.75";
+
+      # No close confirmation
+      "confirm_os_window_close" = "0";
+
+      # Use fish shell
+      "shell" = "fish";
+
+      # Copy
+      "map ctrl+c" = "copy_or_interrupt";
+
+      # Search
+      "map ctrl+f" = "launch --location=hsplit --allow-remote-control kitty +kitten search.py @active-kitty-window-id";
+      "map kitty_mod+f" = "launch --location=hsplit --allow-remote-control kitty +kitten search.py @active-kitty-window-id";
+
+      # Scroll & Zoom
+      "map page_up" = "scroll_page_up";
+      "map page_down" = "scroll_page_down";
+
+      "map ctrl+plus" = "change_font_size all +1";
+      "map ctrl+equal" = "change_font_size all +1";
+      "map ctrl+kp_add" = "change_font_size all +1";
+      "map ctrl+minus" = "change_font_size all -1";
+      "map ctrl+underscore" = "change_font_size all -1";
+      "map ctrl+kp_subtract" = "change_font_size all -1";
+      "map ctrl+0" = "change_font_size all 0";
+      "map ctrl+kp_0" = "change_font_size all 0";
+    };
+  };
+
+  # Ensure starship is enabled for the user
+  programs.starship.enable = true;
 }

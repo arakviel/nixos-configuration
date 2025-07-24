@@ -8,25 +8,15 @@
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, nixos-generators, disko, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
     in
     {
-      nixosConfigurations.arakviel-pc = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.arakviel-pc = lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
@@ -36,77 +26,34 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.arakviel = import ./modules/home.nix;
+            system.stateVersion = "25.05";
           }
-          disko.nixosModules.default
-          ({ config, pkgs, lib, ... }: {
-            disko.devices = {
-              disk.main = {
-                device = "/dev/nvme0n1";
-                type = "disk";
-                content = {
-                  type = "table";
-                  format = "gpt";
-                  partitions = [
-                    {
-                      name = "boot";
-                      part-type = "primary";
-                      start = "1MiB";
-                      end = "1GiB";
-                      fs-type = "fat32";
-                      content = {
-                        type = "filesystem";
-                        format = "vfat";
-                        mountpoint = "/boot";
-                      };
-                    }
-                    {
-                      name = "root";
-                      part-type = "primary";
-                      start = "1GiB";
-                      end = "-4GiB"; # Залишаємо 4 ГБ для swap
-                      fs-type = "ext4";
-                      content = {
-                        type = "filesystem";
-                        format = "ext4";
-                        mountpoint = "/";
-                      };
-                    }
-                    {
-                      name = "swap";
-                      part-type = "primary";
-                      start = "-4GiB";
-                      end = "100%";
-                      content = {
-                        type = "swap";
-                      };
-                    }
-                  ];
-                };
-              };
-            };
-          })
         ];
       };
 
-      packages.${system}.arakviel-pc-iso = nixos-generators.nixosGenerate {
+      nixosConfigurations.installer = lib.nixosSystem {
         inherit system;
-        format = "install-iso";
+        specialArgs = { inherit inputs; };
         modules = [
-          ./modules/configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.arakviel = import ./modules/home.nix;
-          }
-          ({ config, pkgs, lib, ... }: {
-            # Вимкнення networkmanager для ISO, щоб уникнути конфлікту
-            networking.networkmanager.enable = true;
-            networking.wireless.enable = lib.mkForce false; # Явно вимикаємо wireless
-            # Додавання NetworkManager applet для зручності в ISO
+          "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+          ({ pkgs, ... }: {
             environment.systemPackages = with pkgs; [
-              networkmanagerapplet
+              git
             ];
+
+            systemd.services.clone-nixos-config = {
+              description = "Clone NixOS configuration repository";
+              wantedBy = [ "multi-user.target" ];
+              after = [ "network-online.target" ];
+              requires = [ "network-online.target" ];
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStart = ''
+                  ${pkgs.git}/bin/git clone https://github.com/arakviel/nixos-configuration.git /mnt/etc/nixos
+                '';
+              };
+            };
           })
         ];
       };

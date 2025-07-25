@@ -1,5 +1,3 @@
-{ config, pkgs, disko, ... }:
-
 {
   disko.devices = {
     disk = {

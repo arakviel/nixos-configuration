@@ -4,8 +4,8 @@
 
 - `nvme0n1` — основний диск.
 - Хочемо:
-  - `/boot` — 512 МБ (FAT32).
-  - `/` — 50 ГБ (ext4).
+  - `/boot` — 1 ГБ (FAT32).
+  - `/` — 128 ГБ (ext4).
   - `/home` — решта простору (ext4).
 - Усі дані на диску `/dev/nvme0n1` будуть видалені.
 - Використовуємо Flake з репозиторію `https://github.com/arakviel/nixos-configuration`.
@@ -24,15 +24,15 @@ sudo parted /dev/nvme0n1 -- mklabel gpt
 Створіть три розділи: для `/boot`, `/` та `/home`:
 
 ```bash
-sudo parted /dev/nvme0n1 -- mkpart primary fat32 1MiB 512MiB
+sudo parted /dev/nvme0n1 -- mkpart primary fat32 1MiB 1GiB
 sudo parted /dev/nvme0n1 -- set 1 esp on
-sudo parted /dev/nvme0n1 -- mkpart primary ext4 512MiB 50GiB
-sudo parted /dev/nvme0n1 -- mkpart primary ext4 50GiB 100%
+sudo parted /dev/nvme0n1 -- mkpart primary ext4 1GiB 128GiB
+sudo parted /dev/nvme0n1 -- mkpart primary ext4 128GiB 100%
 ```
 
 Це створить:
-- `/dev/nvme0n1p1` — для `/boot` (512 МБ, FAT32).
-- `/dev/nvme0n1p2` — для `/` (50 ГБ, ext4).
+- `/dev/nvme0n1p1` — для `/boot` (1 ГБ, FAT32).
+- `/dev/nvme0n1p2` — для `/` (128 ГБ, ext4).
 - `/dev/nvme0n1p3` — для `/home` (решта простору, ext4).
 
 ## 3. Форматування розділів
@@ -127,6 +127,10 @@ sudo nixos-install --flake /mnt/etc/nixos#arakviel-pc
 ```bash
 sudo umount -R /mnt
 sudo reboot
+
+## Чому `sudo umount -R /mnt`?
+
+Команда `sudo umount -R /mnt` використовується для рекурсивного розмонтування всіх файлових систем, які були змонтовані в директорію `/mnt` та її піддиректорії. Це необхідно зробити перед перезавантаженням системи після встановлення NixOS, щоб гарантувати, що всі зміни були належним чином записані на диск, і щоб уникнути можливих пошкоджень даних або проблем при завантаженні нової системи. Якщо файлові системи залишаються змонтованими, операційна система може спробувати записати на них дані під час завершення роботи, що може призвести до нестабільного стану або втрати даних.
 ```
 
 ## Зауваження
@@ -138,3 +142,11 @@ sudo reboot
   ```
 - **Резервне копіювання**: Усі команди знищують дані на диску `/dev/nvme0n1`. Переконайтеся, що у вас немає важливих даних.
 - Якщо Flake у репозиторії потребує специфічних налаштувань, перевірте `flake.nix` у `/mnt/etc/nixos` і адаптуйте його за потреби.
+
+## Автоматичне створення та форматування розділів за допомогою Disko
+
+Виконайте команду для автоматичного створення та форматування розділів:
+
+```bash
+sudo nix run github:nix-community/disko -- --mode disko /mnt/etc/nixos/disko-config.nix --root /mnt
+```

@@ -1,5 +1,5 @@
 {
-  description = "Arakviel's NixOS configuration";
+  description = "Arakviel's NixOS configuration"; # Updated to trigger re-evaluation
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
@@ -8,9 +8,14 @@
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, disko, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -20,6 +25,7 @@
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
+          disko.nixosModules.disko
           ./modules/configuration.nix
           home-manager.nixosModules.home-manager
           {
@@ -40,20 +46,6 @@
             environment.systemPackages = with pkgs; [
               git
             ];
-
-            systemd.services.clone-nixos-config = {
-              description = "Clone NixOS configuration repository";
-              wantedBy = [ "multi-user.target" ];
-              after = [ "network-online.target" ];
-              requires = [ "network-online.target" ];
-              serviceConfig = {
-                Type = "oneshot";
-                RemainAfterExit = true;
-                ExecStart = ''
-                  ${pkgs.git}/bin/git clone https://github.com/arakviel/nixos-configuration.git /mnt/etc/nixos
-                '';
-              };
-            };
           })
         ];
       };

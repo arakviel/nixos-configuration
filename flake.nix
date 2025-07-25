@@ -26,6 +26,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           disko.nixosModules.disko
+          ./disko-config.nix
           ./modules/configuration.nix
           home-manager.nixosModules.home-manager
           {

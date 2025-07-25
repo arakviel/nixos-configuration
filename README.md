@@ -148,5 +148,5 @@ sudo reboot
 Виконайте команду для автоматичного створення та форматування розділів:
 
 ```bash
-sudo nix run github:nix-community/disko -- --mode disko /mnt/etc/nixos/disko-config.nix --root /mnt
+sudo nix --extra-experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode disko /mnt/etc/nixos/disko-config.nix
 ```

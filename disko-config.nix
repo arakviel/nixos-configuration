@@ -8,7 +8,7 @@
           type = "gpt";
           partitions = {
             boot = {
-              size = "1G";
+              size = "8G";
               type = "EF00"; # EFI system partition
               content = {
                 type = "filesystem";

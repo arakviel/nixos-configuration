@@ -22,7 +22,7 @@
                 type = "filesystem";
                 format = "ext4";
                 mountpoint = "/";
-                extraArgs = "-L nixos"; # Додаємо мітку для /dev/disk/by-label/nixos
+                extraArgs = [ "-L" "nixos" ]; # Виправлено на список
               };
             };
             home = {
@@ -31,7 +31,7 @@
                 type = "filesystem";
                 format = "ext4";
                 mountpoint = "/home";
-                extraArgs = "-L home"; # Додаємо мітку для /dev/disk/by-label/home
+                extraArgs = [ "-L" "home" ]; # Виправлено на список
               };
             };
           };

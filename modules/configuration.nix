@@ -3,7 +3,6 @@
 {
   imports = [
     # Core System Modules
-    ./disko-config.nix
     ./system.nix
     ./boot.nix
     ./networking.nix

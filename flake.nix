@@ -1,5 +1,5 @@
 {
-  description = "Arakviel's NixOS configuration"; # Updated to trigger re-evaluation
+  description = "Arakviel's NixOS configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";

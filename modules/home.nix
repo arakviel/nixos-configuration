@@ -35,6 +35,7 @@
     kitty
     gnome-screenshot # For PrintScreen hotkey
     gromit-mpx # For screen drawing/annotation
+    bibata-cursors # For custom cursor theme
   ];
 
   # GNOME extensions and keyboard layout settings
@@ -56,13 +57,14 @@
       xkb-options = [ "grp:super_space_toggle" "compose:ralt" ];
     };
 
-    # No custom keybindings configured.
-
     # GNOME Accessibility Magnifier (Zoom) settings
     "org/gnome/desktop/a11y/magnifier" = {
       mag-factor = 2.0; # Default zoom level
       mouse-tracking-mode = "edge"; # Zoom follows mouse cursor only at screen edges
       scroll-wheel-zoom = true; # Enable zoom with scroll wheel
+    };
+    "org/gnome/desktop/interface" = {
+      cursor-theme = "Bibata-Modern-Ice";
     };
   };
 

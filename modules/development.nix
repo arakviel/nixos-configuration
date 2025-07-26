@@ -41,20 +41,21 @@
     neovim
 
     # JetBrains IDEs
-    jetbrains.phpstorm
-    jetbrains.rider
-    jetbrains.clion
-    jetbrains.idea-ultimate
-    jetbrains.datagrip
-    jetbrains.pycharm-professional
+    jetbrains-toolbox
+    #jetbrains.phpstorm
+    #jetbrains.rider
+    #jetbrains.clion
+    #jetbrains.idea-ultimate
+    #jetbrains.datagrip
+    #jetbrains.pycharm-professional
 
     # Version Control
     git
 
     # API & Network Tools
     postman
-    kubernetes-helm
-    kubectl
+    #kubernetes-helm
+    #kubectl
     azure-cli
     jq
     yq-go
@@ -66,7 +67,7 @@
     ffmpeg
     jenkins
     lazydocker
-    minikube
+    #minikube
   ];
 
   # User-specific programs

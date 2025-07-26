@@ -21,4 +21,12 @@
     qt6.qtwayland
     wl-clipboard
   ];
+
+  # Exclude default GNOME packages
+  environment.gnome.excludePackages = with pkgs; [
+    epiphany # GNOME Web
+    evolution
+    gnome-maps
+    gnome-contacts
+  ];
 }

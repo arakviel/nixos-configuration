@@ -17,21 +17,12 @@
               };
             };
             root = {
-              size = "128G";
+              size = "100%";
               content = {
                 type = "filesystem";
                 format = "ext4";
                 mountpoint = "/";
                 extraArgs = [ "-L" "nixos" ]; # Виправлено на список
-              };
-            };
-            home = {
-              size = "100%"; # Використати весь залишковий простір
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/home";
-                extraArgs = [ "-L" "home" ]; # Виправлено на список
               };
             };
           };

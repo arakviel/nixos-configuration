@@ -45,6 +45,7 @@
         "dash-to-dock@micxgx.gmail.com"
         "appindicator@ubuntu.com"
         "blur-my-shell@aunetx"
+        "vitals@corecoding.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
       ];
     };

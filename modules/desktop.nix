@@ -14,6 +14,7 @@
     gnome-tweaks
     gnomeExtensions.dash-to-dock
     gnomeExtensions.appindicator
+    gnomeExtensions.vitals
     gnomeExtensions.blur-my-shell
     gnomeExtensions.user-themes
     qt5.qtwayland

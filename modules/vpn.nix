@@ -3,9 +3,9 @@
 {
   # VPN configuration
   services.openvpn.servers = {
-    itstep = {
+    openvpn = {
       config = ''
-        config /etc/openvpn/client/ITSTEP.ovpn
+        config /etc/openvpn/client/main.ovpn
       '';
       autoStart = false;
     };

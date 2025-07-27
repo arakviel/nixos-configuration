@@ -1,19 +1,166 @@
-# Системні та кеш-файли
-result/
+# NixOS Configuration .gitignore
+
+# =============================================================================
+# Nix Build Artifacts
+# =============================================================================
+result
+result-*
+.direnv/
+.envrc
+
+# Nix store symlinks
+/result
+/result-*
+
+# =============================================================================
+# System Images & Virtual Machines
+# =============================================================================
 *.iso
 *.qcow2
 *.img
 *.vdi
+*.vmdk
 *.ova
-*.log
-.cache/
-*.swp
-*.tmp
-*.bak
+*.vbox
+*.raw
 
-# Nix
+# =============================================================================
+# Sensitive Configuration Files
+# =============================================================================
+# VPN configurations (contain private keys/certificates)
+*.ovpn
+*.p12
+*.key
+*.crt
+*.pem
+
+# SSH keys
+id_rsa
+id_ed25519
+*.pub
+known_hosts
+
+# Secrets and credentials
+secrets/
+.secrets/
+*.secret
+*.password
+.env
+.env.local
+
+# Age/sops encrypted files (optional - some prefer to track these)
+# *.age
+# secrets.yaml
+
+# =============================================================================
+# Hardware-specific Files
+# =============================================================================
+# Hardware configuration (auto-generated, machine-specific)
+hardware-configuration.nix
+
+# Machine-specific configurations
+hosts/*/hardware-configuration.nix
+
+# =============================================================================
+# Development & Editor Files
+# =============================================================================
+# Vim/Neovim
+*.swp
+*.swo
+*~
+.vimrc.local
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# =============================================================================
+# Temporary & Cache Files
+# =============================================================================
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.log
+*.cache
+
+# System cache
+.cache/
 .nix-gc/
 .nix-defexpr/
 .nix-channels/
 .nix-profile/
-.nix-store/
+
+# =============================================================================
+# OS-specific Files
+# =============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.Trash-*
+.nfs*
+
+# =============================================================================
+# Documentation Build Artifacts
+# =============================================================================
+# Sphinx documentation
+docs/_build/
+docs/.doctrees/
+
+# MkDocs
+site/
+
+# =============================================================================
+# Custom Project Files
+# =============================================================================
+# Local development overrides
+local.nix
+override.nix
+personal.nix
+
+# Test configurations
+test-*.nix
+experimental/
+
+# Backup configurations
+*.nix.bak
+*.nix.old
+
+# =============================================================================
+# Network & Service Configurations
+# =============================================================================
+# NetworkManager connections (may contain passwords)
+system-connections/
+
+# Docker secrets
+docker-secrets/
+
+# Kubernetes configs
+kubeconfig
+*.kubeconfig

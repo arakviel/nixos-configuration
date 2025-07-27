@@ -70,6 +70,11 @@ sudo reboot
 - `Ctrl + 0` - Reset zoom
 - `Page Up/Down` - Scroll
 
+### VPN Management
+- `nmcli connection up <VPN_NAME>` - Connect to VPN
+- `nmcli connection down <VPN_NAME>` - Disconnect from VPN
+- `nmcli connection show --active` - Show active connections
+
 ## 🛠️ Common NixOS Commands
 
 ### System Management
@@ -155,12 +160,16 @@ nix flake check
 - Docker containers: PostgreSQL, MySQL, MSSQL, Redis, RabbitMQ, Portainer
 - Jenkins CI/CD
 - LibVirt virtualization
+- OpenVPN support with NetworkManager integration
 
 ## 🔧 Configuration Structure
 
 ```
 ├── flake.nix              # Main flake configuration
 ├── disko-config.nix       # Disk partitioning
+├── .gitignore             # NixOS-specific gitignore rules
+├── templates/             # Configuration templates
+│   └── example.ovpn.template # VPN configuration template
 └── modules/
     ├── configuration.nix  # Main system config
     ├── system.nix         # Core system settings & utilities
@@ -174,6 +183,7 @@ nix flake check
     ├── development.nix    # Development tools & languages
     ├── shell.nix          # Shell configuration (Fish, Starship)
     ├── virtualization.nix # Docker & LibVirt
+    ├── vpn.nix            # VPN configuration
     ├── docker-services.nix # Docker containers
     └── home.nix           # User-specific settings
 ```
@@ -222,6 +232,54 @@ sudo nixos-install --flake /mnt/etc/nixos#arakviel-pc
 sudo umount -R /mnt
 sudo reboot
 ```
+
+## 🔐 VPN Configuration
+
+### Adding OpenVPN Configuration
+
+1. **Place your .ovpn file** in `/etc/openvpn/client/`
+2. **Import via NetworkManager:**
+   ```bash
+   nmcli connection import type openvpn file /path/to/your.ovpn
+   ```
+3. **Configure split-tunneling** (optional):
+   ```bash
+   nmcli connection modify <VPN_NAME> ipv4.never-default yes
+   ```
+4. **Connect:**
+   ```bash
+   nmcli connection up <VPN_NAME>
+   ```
+
+### VPN File Security
+
+**✅ Safe alternatives:**
+- Use environment variables for credentials
+- Store files in `/etc/openvpn/client/` (excluded from Git)
+- Use NixOS secrets management (agenix, sops-nix)
+- Create template files with placeholders
+
+**📋 Setup Instructions:**
+1. Copy `templates/example.ovpn.template` to your .ovpn file
+2. Replace placeholders with actual values
+3. Place in `/etc/openvpn/client/`
+4. Import via NetworkManager
+
+## 🔒 Security & Best Practices
+
+### Gitignore Protection
+This configuration includes comprehensive `.gitignore` rules for NixOS projects:
+- **Sensitive files**: VPN configs, SSH keys, certificates
+- **Build artifacts**: `result/`, `*.iso`, VM images
+- **Hardware configs**: Machine-specific `hardware-configuration.nix`
+- **Development files**: Editor configs, cache files
+- **Secrets**: Age/sops files, environment variables
+
+### Safe Configuration Management
+- Use templates for sensitive configurations
+- Store secrets in `/etc/` directories (excluded from Git)
+- Consider using `agenix` or `sops-nix` for production secrets
+- Never commit private keys or passwords
 
 ## 📝 Notes
 

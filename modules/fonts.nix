@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  # System-wide font configurations
+  # Fonts
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
     noto-fonts

@@ -1,101 +1,74 @@
 { config, pkgs, ... }:
 
 {
-  # Development environment packages and configurations
-
+  # Development packages
   environment.systemPackages = with pkgs; [
-    # Programming Languages & Ecosystems
-    # PHP
-    php
-    phpPackages.composer
-
-    # CSharp
-    dotnet-sdk
-
-    # Java
-    jdk
-    maven
-    gradle
-
-    # JavaScript
+    # Programming Languages & Runtimes
+    ## Web Development
     nodejs
+    php
+    python3
+
+    ## Compiled Languages
+    jdk
+    dotnet-sdk
+    gcc
+    clang
+
+    # Package Managers & Build Tools
+    ## JavaScript/Node.js
     yarn
     pnpm
 
-    # Python
-    python3
+    ## PHP
+    phpPackages.composer
+
+    ## Java
+    maven
+    gradle
+
+    ## Python
     poetry
 
-    # C++
-    gcc
+    ## C/C++
     gnumake
     cmake
-    clang
-
-    # Containerization Tools
-    docker
 
     # Code Editors & IDEs
     vscode
     nano
     neovim
-
-    # JetBrains IDEs
     jetbrains-toolbox
-    #jetbrains.phpstorm
-    #jetbrains.rider
-    #jetbrains.clion
-    #jetbrains.idea-ultimate
-    #jetbrains.datagrip
-    #jetbrains.pycharm-professional
 
     # Version Control
     git
 
-    # API & Network Tools
+    # API Development & Testing
     postman
-    #kubernetes-helm
-    #kubectl
-    azure-cli
+    curl
+
+    # Data Processing
     jq
     yq-go
-    curl
+
+    # Cloud & DevOps
+    azure-cli
+
+    # Network Analysis
     nmap
     wireshark
-    
-    # Other Utilities
+
+    # Multimedia
     ffmpeg
+
+    # CI/CD
     jenkins
-    lazydocker
-    #minikube
   ];
 
-  # User-specific programs
-  programs.fish = {
-    enable = true;
-    shellInit = ''
-      starship init fish | source
-      direnv hook fish | source # Automatic direnv loading
-    '';
-  };
-
-  programs.starship.enable = true;
+  # Programs
   programs.wireshark.enable = true;
+  programs.neovim.enable = true;
 
-  # Docker daemon configuration
-  virtualisation.docker.enable = true;
-  virtualisation.docker.autoPrune = {
-    enable = true;
-    dates = "weekly";
-  };
-
-  # Direnv integration for Nix-shells
-  programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true; # Nix integration
-
-  # Console editors
-  programs.neovim.enable = true; # Enable Neovim
-
+  # Services
   services.jenkins.enable = true;
-  virtualisation.libvirtd.enable = true;
 }

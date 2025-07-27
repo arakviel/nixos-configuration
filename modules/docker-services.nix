@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  # Визначаємо директорію docker-global-services як пакет у Nix Store
+  # Docker services directory
   dockerServicesDir = pkgs.stdenv.mkDerivation {
     name = "docker-services";
     src = ../docker-global-services;
@@ -11,7 +11,7 @@ let
     '';
   };
 
-  # Функція для створення Docker Compose сервісу
+  # Docker Compose service template
   mkDockerComposeService = name: {
     description = "${name} Docker Compose Service";
     wantedBy = [ "multi-user.target" ];
@@ -27,10 +27,10 @@ let
   };
 in
 {
-  # Копіюємо docker-global-services до /etc/docker-services/
+  # Copy docker services to /etc/docker-services/
   environment.etc."docker-services".source = dockerServicesDir;
 
-  # Створюємо systemd служби для кожного Docker Compose сервісу
+  # Docker Compose systemd services
   systemd.services = {
     docker-postgres = mkDockerComposeService "postgres";
     docker-mysql = mkDockerComposeService "mysql";

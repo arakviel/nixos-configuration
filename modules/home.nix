@@ -1,44 +1,41 @@
-{ config, pkgs, lib, inputs, ... }: # Pass inputs as a whole
+{ config, pkgs, lib, inputs, ... }:
 
 {
-
   home.username = "arakviel";
   home.homeDirectory = "/home/arakviel";
   home.stateVersion = "25.05";
 
-  # User-specific packages
+  # User packages
   home.packages = with pkgs; [
     # Browsers
     google-chrome
     firefox
     microsoft-edge
 
-    # Messengers
+    # Communication
     telegram-desktop
     discord
     slack
 
-    # Streaming and Multimedia
+    # Multimedia
     obs-studio
 
-    # Notes
+    # Productivity
     obsidian
+    onlyoffice-bin
 
-    # VPN and Security
+    # Security
     protonvpn-gui
     proton-pass
 
-    # Office Suite
-    onlyoffice-bin
-
-    # Terminal Emulator
+    # Utilities
     kitty
-    gnome-screenshot # For PrintScreen hotkey
-    gromit-mpx # For screen drawing/annotation
-    bibata-cursors # For custom cursor theme
+    gnome-screenshot
+    gromit-mpx
+    bibata-cursors
   ];
 
-  # GNOME extensions and keyboard layout settings
+  # GNOME configuration
   dconf.settings = {
     "org/gnome/shell" = {
       enabled-extensions = [
@@ -48,6 +45,7 @@
         "vitals@corecoding.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
       ];
+      disable-user-extensions = false;
     };
     "org/gnome/desktop/input-sources" = {
       sources = with lib.hm.gvariant; [
@@ -57,19 +55,20 @@
       ];
       xkb-options = [ "grp:super_space_toggle" "compose:ralt" ];
     };
-
-    # GNOME Accessibility Magnifier (Zoom) settings
     "org/gnome/desktop/a11y/magnifier" = {
-      mag-factor = 2.0; # Default zoom level
-      mouse-tracking-mode = "edge"; # Zoom follows mouse cursor only at screen edges
-      scroll-wheel-zoom = true; # Enable zoom with scroll wheel
+      mag-factor = 2.0;
+      mouse-tracking-mode = "edge";
+      scroll-wheel-zoom = true;
     };
     "org/gnome/desktop/interface" = {
       cursor-theme = "Bibata-Modern-Ice";
     };
+    "org/gnome/desktop/wm/preferences" = {
+      button-layout = "appmenu:minimize,maximize,close";
+    };
   };
 
-  # User-specific program configurations
+  # Programs
   programs.fish = {
     enable = true;
     shellInit = ''
@@ -91,7 +90,7 @@
     };
   };
 
-  # Declarative Kitty configuration
+  # Terminal configuration
   programs.kitty = {
     enable = true;
     font = {
@@ -99,30 +98,16 @@
       size = 11.0;
     };
     settings = {
-      # Cursor settings
       "cursor_shape" = "beam";
       "cursor_trail" = "1";
-
-      # Padding (why weird value? consistency with foot)
       "window_margin_width" = "21.75";
-
-      # No close confirmation
       "confirm_os_window_close" = "0";
-
-      # Use fish shell
       "shell" = "fish";
-
-      # Copy
       "map ctrl+c" = "copy_or_interrupt";
-
-      # Search
       "map ctrl+f" = "launch --location=hsplit --allow-remote-control kitty +kitten search.py @active-kitty-window-id";
       "map kitty_mod+f" = "launch --location=hsplit --allow-remote-control kitty +kitten search.py @active-kitty-window-id";
-
-      # Scroll & Zoom
       "map page_up" = "scroll_page_up";
       "map page_down" = "scroll_page_down";
-
       "map ctrl+plus" = "change_font_size all +1";
       "map ctrl+equal" = "change_font_size all +1";
       "map ctrl+kp_add" = "change_font_size all +1";
@@ -134,6 +119,5 @@
     };
   };
 
-  # Ensure starship is enabled for the user
   programs.starship.enable = true;
 }

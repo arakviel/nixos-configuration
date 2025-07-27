@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  # User configurations
+  # User configuration
   users.users.arakviel = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "docker" "libvirtd" ];

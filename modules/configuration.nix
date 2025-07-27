@@ -2,21 +2,22 @@
 
 {
   imports = [
-    # Core System Modules
+    # Core system modules
     ./system.nix
     ./boot.nix
     ./networking.nix
     ./services.nix
     ./hardware.nix
 
-    # User and Desktop Environment
+    # User and desktop environment
     ./users.nix
     ./desktop.nix
     ./fonts.nix
 
-    # Development and Programs
+    # Development and programs
     ./development.nix
-    ./programs.nix
+    ./shell.nix
+    ./virtualization.nix
     ./docker-services.nix
   ];
 }

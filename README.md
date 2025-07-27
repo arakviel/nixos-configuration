@@ -1,152 +1,231 @@
-# Інструкція з установки NixOS
+# Arakviel's NixOS Configuration
 
-## Передумови
+Modern NixOS configuration with GNOME desktop, development tools, and automated Docker services.
 
-- `nvme0n1` — основний диск.
-- Хочемо:
-  - `/boot` — 1 ГБ (FAT32).
-  - `/` — 128 ГБ (ext4).
-  - `/home` — решта простору (ext4).
-- Усі дані на диску `/dev/nvme0n1` будуть видалені.
-- Використовуємо Flake з репозиторію `https://github.com/arakviel/nixos-configuration`.
+## 🚀 Quick Installation
 
-## 1. Видалення старих розділів
+### Prerequisites
+- UEFI system
+- Target disk: `/dev/nvme1n1` (all data will be erased)
+- Internet connection
 
-Очистіть таблицю розділів на диску:
+### Automated Installation (Recommended)
 
-```bash
-sudo wipefs -a /dev/nvme0n1
-sudo parted /dev/nvme0n1 -- mklabel gpt
-```
-
-## 2. Створення нових розділів
-
-Створіть три розділи: для `/boot`, `/` та `/home`:
-
-```bash
-sudo parted /dev/nvme0n1 -- mkpart primary fat32 1MiB 1GiB
-sudo parted /dev/nvme0n1 -- set 1 esp on
-sudo parted /dev/nvme0n1 -- mkpart primary ext4 1GiB 128GiB
-sudo parted /dev/nvme0n1 -- mkpart primary ext4 128GiB 100%
-```
-
-Це створить:
-- `/dev/nvme0n1p1` — для `/boot` (1 ГБ, FAT32).
-- `/dev/nvme0n1p2` — для `/` (128 ГБ, ext4).
-- `/dev/nvme0n1p3` — для `/home` (решта простору, ext4).
-
-## 3. Форматування розділів
-
-Відформатуйте розділи:
-
-```bash
-sudo mkfs.vfat -F 32 /dev/nvme0n1p1
-sudo mkfs.ext4 -L nixos /dev/nvme0n1p2
-sudo mkfs.ext4 -L home /dev/nvme0n1p3
-```
-
-## 4. Монтування розділів
-
-Змонтуйте розділи в правильному порядку:
-
-```bash
-sudo mount /dev/disk/by-label/nixos /mnt
-sudo mkdir -p /mnt/boot
-sudo mount /dev/nvme0n1p1 /mnt/boot
-sudo mkdir -p /mnt/home
-sudo mount /dev/disk/by-label/home /mnt/home
-```
-
-## 5. Клонування конфігурації Flake
-
-Склонуйте конфігурацію з репозиторію в `/mnt/etc/nixos`:
-
+1. **Clone configuration**
 ```bash
 sudo mkdir -p /mnt/etc/nixos
 sudo git clone https://github.com/arakviel/nixos-configuration.git /mnt/etc/nixos
 ```
 
-## 6. Ініціалізація конфігурації
-
-Згенеруйте базову конфігурацію NixOS:
-
+2. **Auto-partition with Disko**
 ```bash
-sudo nixos-generate-config --root /mnt
+sudo nix --extra-experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode disko /mnt/etc/nixos/disko-config.nix
 ```
 
-Переконайтеся, що файл `/mnt/etc/nixos/configuration.nix` містить коректні налаштування для ваших розділів:
-
-```nix
-{
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "ext4";
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/nvme0n1p1";
-    fsType = "vfat";
-    neededForBoot = true;
-  };
-
-  fileSystems."/home" = {
-    device = "/dev/disk/by-label/home";
-    fsType = "ext4";
-  };
-
-  boot.loader = {
-    systemd-boot.enable = true;  # Для UEFI систем
-    efi.canTouchEfiVariables = true;
-  };
-}
-```
-
-**Примітка**: Якщо ви використовуєте BIOS, замініть `systemd-boot` на GRUB:
-```nix
-boot.loader.grub = {
-  enable = true;
-  device = "/dev/nvme0n1";
-  useOSProber = false;
-};
-```
-
-## 7. Встановлення системи (для Flake)
-
-Виконайте встановлення, використовуючи Flake з клонованого репозиторію:
-
+3. **Install system**
 ```bash
 sudo nixos-install --flake /mnt/etc/nixos#arakviel-pc
 ```
 
-Вас попросять встановити пароль для користувача `root`.
+4. **Reboot**
+```bash
+sudo reboot
+```
 
-## 8. Перезавантаження
+## ⌨️ Keyboard Shortcuts
 
-Після встановлення розмонтуйте розділи та перезавантажте систему:
+### Workspaces
+- `Ctrl + Alt + Left/Right` - Switch between workspaces
+- `Super + Page Up/Down` - Switch between workspaces
+- `Super + Home/End` - Go to first/last workspace
+- `Ctrl + Shift + Alt + Left/Right` - Move window to workspace
 
+### Window Management
+- `Alt + F4` - Close window
+- `Super + Up` - Maximize window
+- `Super + h` - Minimize window
+- `Alt + Tab` / `Super + Tab` - Switch applications
+- `Alt + F7/F8` - Move/resize window
+
+### Applications
+- `Super + 1-9` - Switch to application in dock
+- `Super + Ctrl + 1-9` - Open new window of application
+- `Super + a` - Show all applications
+- `Super + s` - Quick settings
+
+### Screenshots
+- `Print` - Screenshot UI
+- `Shift + Print` - Take screenshot
+- `Alt + Print` - Screenshot active window
+- `Ctrl + Shift + Alt + R` - Screen recording
+
+### Language Switching
+- `Super + Space` - Switch keyboard layout (US/UA/RU)
+- `Shift + Super + Space` - Switch layout backward
+
+### Terminal (Kitty)
+- `Ctrl + C` - Copy or interrupt
+- `Ctrl + F` - Search in terminal
+- `Ctrl + Plus/Minus` - Zoom in/out
+- `Ctrl + 0` - Reset zoom
+- `Page Up/Down` - Scroll
+
+## 🛠️ Common NixOS Commands
+
+### System Management
+```bash
+# Rebuild system
+sudo nixos-rebuild switch --flake .#arakviel-pc
+
+# Test configuration without switching
+sudo nixos-rebuild test --flake .#arakviel-pc
+
+# Build configuration
+sudo nixos-rebuild build --flake .#arakviel-pc
+
+# Rollback to previous generation
+sudo nixos-rebuild switch --rollback
+
+# List generations
+sudo nix-env --list-generations --profile /nix/var/nix/profiles/system
+```
+
+### Package Management
+```bash
+# Search packages
+nix search nixpkgs <package-name>
+
+# Install package temporarily
+nix shell nixpkgs#<package-name>
+
+# Run package without installing
+nix run nixpkgs#<package-name>
+
+# Update flake inputs
+nix flake update
+
+# Show flake info
+nix flake show
+```
+
+### Garbage Collection
+```bash
+# Collect garbage
+sudo nix-collect-garbage
+
+# Delete old generations (older than 7 days)
+sudo nix-collect-garbage --delete-older-than 7d
+
+# Optimize store
+sudo nix-store --optimise
+```
+
+### Development
+```bash
+# Enter development shell
+nix develop
+
+# Create flake template
+nix flake init
+
+# Check flake
+nix flake check
+```
+
+## 📦 Included Software
+
+### Desktop Environment
+- GNOME with extensions (Dash to Dock, Vitals, Blur My Shell)
+- Kitty terminal with Fish shell
+- Starship prompt
+
+### Development Tools
+- Languages: PHP, C#, Java, JavaScript, Python, C++
+- Editors: VSCode, Neovim
+- Tools: Docker, Git, Postman, Azure CLI
+- JetBrains Toolbox
+
+### Applications
+- Browsers: Chrome, Firefox, Edge
+- Communication: Telegram, Discord, Slack
+- Productivity: Obsidian, OnlyOffice
+- Security: ProtonVPN, Proton Pass
+
+### Services
+- Docker containers: PostgreSQL, MySQL, MSSQL, Redis, RabbitMQ, Portainer
+- Jenkins CI/CD
+- LibVirt virtualization
+
+## 🔧 Configuration Structure
+
+```
+├── flake.nix              # Main flake configuration
+├── disko-config.nix       # Disk partitioning
+└── modules/
+    ├── configuration.nix  # Main system config
+    ├── system.nix         # Core system settings & utilities
+    ├── boot.nix           # Boot configuration
+    ├── hardware.nix       # Hardware settings
+    ├── networking.nix     # Network and firewall
+    ├── services.nix       # System services
+    ├── users.nix          # User accounts
+    ├── desktop.nix        # GNOME configuration
+    ├── fonts.nix          # Font configuration
+    ├── development.nix    # Development tools & languages
+    ├── shell.nix          # Shell configuration (Fish, Starship)
+    ├── virtualization.nix # Docker & LibVirt
+    ├── docker-services.nix # Docker containers
+    └── home.nix           # User-specific settings
+```
+
+---
+
+## 🔧 Manual Installation (Alternative)
+
+### 1. Prepare Disk
+```bash
+# Wipe disk
+sudo wipefs -a /dev/nvme1n1
+sudo parted /dev/nvme1n1 -- mklabel gpt
+
+# Create partitions
+sudo parted /dev/nvme1n1 -- mkpart primary fat32 1MiB 1GiB
+sudo parted /dev/nvme1n1 -- set 1 esp on
+sudo parted /dev/nvme1n1 -- mkpart primary ext4 1GiB 100%
+
+# Format partitions
+sudo mkfs.vfat -F 32 /dev/nvme1n1p1
+sudo mkfs.ext4 -L nixos /dev/nvme1n1p2
+```
+
+### 2. Mount Filesystems
+```bash
+sudo mount /dev/disk/by-label/nixos /mnt
+sudo mkdir -p /mnt/boot
+sudo mount /dev/nvme1n1p1 /mnt/boot
+```
+
+### 3. Generate Hardware Config
+```bash
+sudo nixos-generate-config --root /mnt
+```
+
+### 4. Clone and Install
+```bash
+sudo mkdir -p /mnt/etc/nixos
+sudo git clone https://github.com/arakviel/nixos-configuration.git /mnt/etc/nixos
+sudo nixos-install --flake /mnt/etc/nixos#arakviel-pc
+```
+
+### 5. Cleanup and Reboot
 ```bash
 sudo umount -R /mnt
 sudo reboot
-
-## Чому `sudo umount -R /mnt`?
-
-Команда `sudo umount -R /mnt` використовується для рекурсивного розмонтування всіх файлових систем, які були змонтовані в директорію `/mnt` та її піддиректорії. Це необхідно зробити перед перезавантаженням системи після встановлення NixOS, щоб гарантувати, що всі зміни були належним чином записані на диск, і щоб уникнути можливих пошкоджень даних або проблем при завантаженні нової системи. Якщо файлові системи залишаються змонтованими, операційна система може спробувати записати на них дані під час завершення роботи, що може призвести до нестабільного стану або втрати даних.
 ```
 
-## Зауваження
+## 📝 Notes
 
-- **UEFI/BIOS**: Інструкція передбачає UEFI. Для BIOS замініть `systemd-boot` на GRUB у `configuration.nix`.
-- **UUID**: Використання `/dev/disk/by-label` є більш надійним, ніж `/dev/nvme0n1pX`. Перегляньте UUID за допомогою:
-  ```bash
-  lsblk -f
-  ```
-- **Резервне копіювання**: Усі команди знищують дані на диску `/dev/nvme0n1`. Переконайтеся, що у вас немає важливих даних.
-- Якщо Flake у репозиторії потребує специфічних налаштувань, перевірте `flake.nix` у `/mnt/etc/nixos` і адаптуйте його за потреби.
-
-## Автоматичне створення та форматування розділів за допомогою Disko
-
-Виконайте команду для автоматичного створення та форматування розділів:
-
-```bash
-sudo nix --extra-experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode disko /mnt/etc/nixos/disko-config.nix
-```
+- **UEFI Required**: This configuration uses GRUB with EFI support
+- **Disk Warning**: All data on target disk will be erased
+- **Network**: Ensure stable internet connection during installation
+- **Passwords**: Set root password during installation process

@@ -1,15 +1,15 @@
 { config, pkgs, ... }:
 
 {
-  # General system settings
+  # Nix settings
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.auto-optimise-store = true;
 
-  # Localization settings
-  i18n.defaultLocale = "en_US.UTF-8"; # Англійська мова для інтерфейсу системи
+  # Localization
+  i18n.defaultLocale = "en_US.UTF-8";
   i18n.extraLocaleSettings = {
     LC_TIME = "uk_UA.UTF-8";
-    LC_NUMERIC = "uk_UA.UTF-8"; 
+    LC_NUMERIC = "uk_UA.UTF-8";
     LC_MONETARY = "uk_UA.UTF-8";
     LC_PAPER = "uk_UA.UTF-8";
     LC_NAME = "uk_UA.UTF-8";
@@ -18,14 +18,14 @@
     LC_MEASUREMENT = "uk_UA.UTF-8";
   };
 
-  time.timeZone = "Europe/Kiev"; # Set your timezone
+  time.timeZone = "Europe/Kiev";
 
   nixpkgs.config.allowUnfree = true;
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";
   nix.gc.options = "--delete-older-than 7d";
 
-  # Audio (PipeWire)
+  # Audio
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -34,7 +34,22 @@
     pulse.enable = true;
   };
 
-  # Sudo
+  # Security
   security.sudo.enable = true;
   security.sudo.wheelNeedsPassword = true;
+
+  # System utilities
+  environment.systemPackages = with pkgs; [
+    wget
+    htop
+    neofetch
+    unzip
+    zip
+    gnupg
+    usbutils
+    pciutils
+    lshw
+    lm_sensors
+    smartmontools
+  ];
 }

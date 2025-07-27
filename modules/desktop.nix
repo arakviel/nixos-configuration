@@ -1,17 +1,18 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Desktop environment settings
+  # Desktop environment
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
-  # Keyboard layout settings for English, Ukrainian, and Russian
+  # Keyboard layouts
   services.xserver.xkb.layout = "us,ua,ru";
   services.xserver.xkb.options = "grp:super_space_toggle,compose:ralt";
 
   environment.systemPackages = with pkgs; [
     gnome-tweaks
+    gnome-browser-connector
     gnomeExtensions.dash-to-dock
     gnomeExtensions.appindicator
     gnomeExtensions.vitals
@@ -22,11 +23,15 @@
     wl-clipboard
   ];
 
-  # Exclude default GNOME packages
+  # Exclude GNOME packages
   environment.gnome.excludePackages = with pkgs; [
-    epiphany # GNOME Web
+    epiphany
     evolution
-    gnome-maps
     gnome-contacts
+    gnome-maps
+    yelp
+    gnome-user-docs
+    gnome-terminal
+    gnome-tour
   ];
 }

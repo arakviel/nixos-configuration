@@ -9,7 +9,7 @@
           partitions = {
             boot = {
               size = "1G";
-              type = "EF00"; # EFI system partition
+              type = "EF00";
               content = {
                 type = "filesystem";
                 format = "vfat";
@@ -22,7 +22,7 @@
                 type = "filesystem";
                 format = "ext4";
                 mountpoint = "/";
-                extraArgs = [ "-L" "nixos" ]; # Виправлено на список
+                extraArgs = [ "-L" "nixos" ];
               };
             };
           };

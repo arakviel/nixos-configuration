@@ -18,6 +18,7 @@
     ./development.nix
     ./shell.nix
     ./virtualization.nix
+    ./vpn.nix
     ./docker-services.nix
   ];
 }

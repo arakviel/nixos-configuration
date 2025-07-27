@@ -42,6 +42,7 @@
 
     # Version Control
     git
+    gh
 
     # API Development & Testing
     postman

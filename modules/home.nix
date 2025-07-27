@@ -85,7 +85,7 @@
       pull.rebase = true;
       color.ui = true;
       help.autocorrect = 20;
-      credential.helper = "store";
+      credential.helper = "!gh auth git-credential";
       safe.directory = "*";
     };
   };

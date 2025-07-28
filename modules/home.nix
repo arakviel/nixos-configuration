@@ -40,10 +40,12 @@
     "org/gnome/shell" = {
       enabled-extensions = [
         "dash-to-dock@micxgx.gmail.com"
-        "appindicator@ubuntu.com"
+        "appindicatorsupport@rgscjounas.gmail.com"
         "blur-my-shell@aunetx"
-        "vitals@corecoding.com"
+        "Vitals@CoreCoding.com"
         "user-theme@gnome-shell-extensions.gcampax.github.com"
+        "clipboard-indicator@tudmotu.com"
+        "weatherornot@somepaulo.github.io"
       ];
       disable-user-extensions = false;
     };

@@ -8,7 +8,6 @@
     nodejs
     php
     python3
-
     ## Compiled Languages
     jdk
     dotnet-sdk
@@ -58,6 +57,7 @@
     # Network Analysis
     nmap
     wireshark
+    adguardian
 
     # Multimedia
     ffmpeg

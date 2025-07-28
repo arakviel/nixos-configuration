@@ -12,12 +12,15 @@
 
   environment.systemPackages = with pkgs; [
     gnome-tweaks
+    gnome-extension-manager
     gnome-browser-connector
     gnomeExtensions.dash-to-dock
     gnomeExtensions.appindicator
     gnomeExtensions.vitals
     gnomeExtensions.blur-my-shell
     gnomeExtensions.user-themes
+    gnomeExtensions.clipboard-indicator
+    gnomeExtensions.weather-or-not
     qt5.qtwayland
     qt6.qtwayland
     wl-clipboard

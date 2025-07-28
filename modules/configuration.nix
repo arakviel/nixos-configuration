@@ -8,7 +8,6 @@
     ./networking.nix
     ./services.nix
     ./hardware.nix
-    ./filesystems.nix
 
     # User and desktop environment
     ./users.nix

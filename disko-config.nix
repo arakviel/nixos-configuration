@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   disko.devices = {
@@ -42,6 +42,7 @@
       device = "/dev/disk/by-uuid/a96dbf43-bf93-46b3-8ff1-ab05658ec17b";
       fsType = "ext4";
       options = [ "defaults" "noatime" "errors=remount-ro" ];
+      autoResize = true;  # Automatically resize filesystem to fill partition
     };
     "/boot" = lib.mkForce {
       device = "/dev/disk/by-uuid/49EF-3D8C";
@@ -58,4 +59,20 @@
 
   # Clean /tmp on boot
   boot.tmp.cleanOnBoot = true;
+
+  # Automatic filesystem resize service
+  systemd.services.resize-root-filesystem = {
+    description = "Resize root filesystem to fill partition";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "local-fs.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.e2fsprogs}/bin/resize2fs /dev/disk/by-uuid/a96dbf43-bf93-46b3-8ff1-ab05658ec17b";
+      StandardOutput = "journal";
+      StandardError = "journal";
+    };
+    # Only run if the filesystem needs resizing
+    unitConfig.ConditionPathExists = "/dev/disk/by-uuid/a96dbf43-bf93-46b3-8ff1-ab05658ec17b";
+  };
 }

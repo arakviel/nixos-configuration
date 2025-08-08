@@ -30,4 +30,23 @@
   };
 
   services.xserver.videoDrivers = [ "nvidia" ];
+
+  fileSystems = {
+    "/" = {
+      device = "/dev/nvme1n1p2";
+      fsType = "ext4";
+      autoResize = true;
+    };
+    "/boot" = {
+      device = "/dev/nvme1n1p1";
+      fsType = "vfat";
+    };
+  };
+
+  services.fstrim = {
+    enable = true;
+    interval = "weekly";
+  };
+
+  boot.tmp.cleanOnBoot = true;
 }

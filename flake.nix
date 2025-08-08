@@ -9,13 +9,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, disko, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -25,8 +21,6 @@
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
-          disko.nixosModules.disko
-          ./disko-config.nix
           ./modules/configuration.nix
           home-manager.nixosModules.home-manager
           {

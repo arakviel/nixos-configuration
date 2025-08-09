@@ -26,6 +26,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
             home-manager.users.arakviel = import ./modules/home.nix;
             system.stateVersion = "25.05";
           }

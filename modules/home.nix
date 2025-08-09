@@ -35,6 +35,25 @@
     bibata-cursors
   ];
 
+  # Copy Microsoft fonts to user directory for OnlyOffice compatibility
+  home.activation.copyFonts = config.lib.dag.entryAfter ["writeBoundary"] ''
+    $DRY_RUN_CMD mkdir -p $HOME/.local/share/fonts
+
+    # Copy Times New Roman and Arial fonts
+    if [ -d "/nix/store" ]; then
+      $DRY_RUN_CMD find /nix/store -name "*Times_New_Roman*.ttf" -type f -exec cp {} $HOME/.local/share/fonts/ \; 2>/dev/null || true
+      $DRY_RUN_CMD find /nix/store -name "*Arial*.ttf" -type f -exec cp {} $HOME/.local/share/fonts/ \; 2>/dev/null || true
+
+      # Update font cache
+      $DRY_RUN_CMD ${pkgs.fontconfig}/bin/fc-cache -fv $HOME/.local/share/fonts 2>/dev/null || true
+    fi
+  '';
+
+  # Environment variables for better font discovery
+  home.sessionVariables = {
+    FONTCONFIG_PATH = "/etc/fonts:/run/current-system/sw/etc/fonts";
+  };
+
   # GNOME configuration
   dconf.settings = {
     "org/gnome/shell" = {

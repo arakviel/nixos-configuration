@@ -36,6 +36,7 @@
     # Code Editors & IDEs
     nano
     neovim
+    vscode
 
     # JetBrains IDEs
     jetbrains.phpstorm

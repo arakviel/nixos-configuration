@@ -64,9 +64,20 @@
     };
     "org/gnome/desktop/interface" = {
       cursor-theme = "Bibata-Modern-Ice";
+      gtk-theme = "Adwaita-dark";
+      color-scheme = "prefer-dark";
+      text-scaling-factor = 1.25;
     };
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";
+    };
+    "org/gnome/desktop/session" = {
+      idle-delay = lib.hm.gvariant.mkUint32 0;
+    };
+    "org/gnome/settings-daemon/plugins/power" = {
+      sleep-inactive-ac-type = "nothing";
+      sleep-inactive-battery-type = "nothing";
+      power-button-action = "nothing";
     };
   };
 

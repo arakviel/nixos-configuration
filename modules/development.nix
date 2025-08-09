@@ -34,10 +34,16 @@
     cmake
 
     # Code Editors & IDEs
-    vscode
     nano
     neovim
-    jetbrains-toolbox
+
+    # JetBrains IDEs
+    jetbrains.phpstorm
+    jetbrains.idea-ultimate
+    jetbrains.pycharm-professional
+    jetbrains.rider
+    jetbrains.datagrip
+    android-studio
 
     # Version Control
     git

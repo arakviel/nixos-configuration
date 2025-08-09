@@ -68,6 +68,8 @@
       ];
       disable-user-extensions = false;
     };
+
+
     "org/gnome/desktop/input-sources" = {
       sources = with lib.hm.gvariant; [
         (mkTuple [ (mkString "xkb") (mkString "us") ])
@@ -85,7 +87,11 @@
       cursor-theme = "Bibata-Modern-Ice";
       gtk-theme = "Adwaita-dark";
       color-scheme = "prefer-dark";
-      text-scaling-factor = 1.25;
+    };
+
+    # Enable fractional scaling options
+    "org/gnome/mutter" = {
+      experimental-features = [ "scale-monitor-framebuffer" ];
     };
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";

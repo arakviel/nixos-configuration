@@ -51,5 +51,35 @@
     lshw
     lm_sensors
     smartmontools
+    xdg-utils  # For default applications support
   ];
+
+  # Global git configuration
+  programs.git = {
+    enable = true;
+    config = {
+      user = {
+        name = "arakviel";
+        email = "insider.arakviel@gmail.com";
+      };
+      init = {
+        defaultBranch = "main";
+      };
+      pull = {
+        rebase = true;
+      };
+      color = {
+        ui = true;
+      };
+      help = {
+        autocorrect = 20;
+      };
+      credential = {
+        helper = "!gh auth git-credential";
+      };
+      safe = {
+        directory = "*";
+      };
+    };
+  };
 }

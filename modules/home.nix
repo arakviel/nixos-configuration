@@ -49,11 +49,6 @@
     fi
   '';
 
-  # Environment variables for better font discovery
-  home.sessionVariables = {
-    FONTCONFIG_PATH = "/etc/fonts:/run/current-system/sw/etc/fonts";
-  };
-
   # GNOME configuration
   dconf.settings = {
     "org/gnome/shell" = {
@@ -67,6 +62,44 @@
         "weatherornot@somepaulo.github.io"
       ];
       disable-user-extensions = false;
+      favorite-apps = [
+        "org.gnome.Nautilus.desktop"
+        "microsoft-edge.desktop"
+        "kitty.desktop"
+        "org.telegram.desktop.desktop"
+        "code.desktop"
+        "phpstorm.desktop"
+        "rider.desktop"
+        "idea-ultimate.desktop"
+        "datagrip.desktop"
+        "com.obsproject.Studio.desktop"
+        "onlyoffice-desktopeditors.desktop"
+      ];
+    };
+
+    # Weather extension configuration (Ужгород)
+    "org/gnome/shell/extensions/weatherornot" = {
+      city = "Uzhhorod, Ukraine";
+      coordinates = lib.hm.gvariant.mkTuple [
+        (lib.hm.gvariant.mkDouble 48.6167)
+        (lib.hm.gvariant.mkDouble 22.3)
+      ];
+      units = "metric";
+      refresh-interval = 600;
+    };
+
+    # Dash to Dock configuration
+    "org/gnome/shell/extensions/dash-to-dock" = {
+      dock-position = "BOTTOM";
+      dock-fixed = true;
+      show-favorites = true;
+      show-running = true;
+      show-apps-at-top = false;
+      click-action = "minimize";
+      scroll-action = "cycle-windows";
+      hot-keys = false;
+      hotkeys-overlay = false;
+      hotkeys-show-dock = false;
     };
 
 
@@ -158,4 +191,22 @@
   };
 
   programs.starship.enable = true;
+
+  # Default applications configuration
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "microsoft-edge.desktop";
+      "x-scheme-handler/http" = "microsoft-edge.desktop";
+      "x-scheme-handler/https" = "microsoft-edge.desktop";
+      "x-scheme-handler/about" = "microsoft-edge.desktop";
+      "x-scheme-handler/unknown" = "microsoft-edge.desktop";
+    };
+  };
+
+  # Set default browser environment variable
+  home.sessionVariables = {
+    FONTCONFIG_PATH = "/etc/fonts:/run/current-system/sw/etc/fonts";
+    BROWSER = "microsoft-edge";
+  };
 }

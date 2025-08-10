@@ -43,6 +43,10 @@
     };
   };
 
+  swapDevices = [{
+    device = "/dev/nvme0n1p3";
+  }];
+
   services.fstrim = {
     enable = true;
     interval = "weekly";

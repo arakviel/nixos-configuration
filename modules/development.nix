@@ -9,8 +9,8 @@
     php
     python3
     ## Compiled Languages
-    jdk
-    dotnet-sdk
+    jdk24
+    dotnet-sdk_9
     gcc
     clang
 

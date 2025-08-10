@@ -33,6 +33,9 @@
     gnome-screenshot
     gromit-mpx
     bibata-cursors
+
+    # .NET development tools
+    dotnet-ef
   ];
 
   # Copy Microsoft fonts to user directory for OnlyOffice compatibility
@@ -204,9 +207,17 @@
     };
   };
 
-  # Set default browser environment variable
+  # Set default browser environment variable and PATH
   home.sessionVariables = {
     FONTCONFIG_PATH = "/etc/fonts:/run/current-system/sw/etc/fonts";
     BROWSER = "microsoft-edge";
+    # .NET configuration
+    DOTNET_ROOT = "/run/current-system/sw";
+    DOTNET_CLI_TELEMETRY_OPTOUT = "1";
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE = "1";
   };
+
+  home.sessionPath = [
+    "$HOME/.dotnet/tools"
+  ];
 }

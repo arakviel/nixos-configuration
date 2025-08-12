@@ -8,6 +8,7 @@
     ./networking.nix
     ./services.nix
     ./hardware.nix
+    ./audio.nix
 
     # User and desktop environment
     ./users.nix

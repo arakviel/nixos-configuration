@@ -25,14 +25,7 @@
   nix.gc.dates = "weekly";
   nix.gc.options = "--delete-older-than 7d";
 
-  # Audio
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
+
 
   # Security
   security.sudo.enable = true;

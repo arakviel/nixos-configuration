@@ -140,6 +140,11 @@
       sleep-inactive-battery-type = "nothing";
       power-button-action = "nothing";
     };
+
+    # Audio settings - disable automatic microphone adjustment
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      mic-mute = [ "<Super>m" ];
+    };
   };
 
   # Programs

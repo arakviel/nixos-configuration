@@ -145,6 +145,20 @@
     "org/gnome/settings-daemon/plugins/media-keys" = {
       mic-mute = [ "<Super>m" ];
     };
+
+    # Disable automatic input level adjustment
+    "org/gnome/desktop/sound" = {
+      allow-volume-above-100-percent = true;
+      input-feedback-sounds = false;
+    };
+
+    # PulseAudio/PipeWire settings via dconf
+    "org/freedesktop/pulseaudio" = {
+      # Disable automatic gain control
+      "daemon/default-sample-format" = "s16le";
+      "daemon/default-sample-rate" = lib.hm.gvariant.mkUint32 48000;
+      "daemon/default-sample-channels" = lib.hm.gvariant.mkUint32 2;
+    };
   };
 
   # Programs

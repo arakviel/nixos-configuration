@@ -20,6 +20,12 @@
 
   time.timeZone = "Europe/Kiev";
 
+  # Kernel parameters to disable audio auto-adjustment
+  boot.kernelParams = [
+    "snd_hda_intel.power_save=0"
+    "snd_hda_intel.power_save_controller=N"
+  ];
+
   nixpkgs.config.allowUnfree = true;
   nix.gc.automatic = true;
   nix.gc.dates = "weekly";

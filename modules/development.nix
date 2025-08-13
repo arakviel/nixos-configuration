@@ -58,6 +58,9 @@
     jq
     yq-go
 
+    # Tunneling & Networking
+    ngrok  # Secure tunnels to localhost
+
     # Cloud & DevOps
     azure-cli
 

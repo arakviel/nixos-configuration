@@ -33,6 +33,7 @@
     gnome-screenshot
     gromit-mpx
     bibata-cursors
+    ventoy-full
 
     # Torrent client
     qbittorrent

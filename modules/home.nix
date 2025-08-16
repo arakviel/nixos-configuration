@@ -34,6 +34,9 @@
     gromit-mpx
     bibata-cursors
 
+    # Torrent client
+    qbittorrent
+
     # .NET development tools
     dotnet-ef
   ];
@@ -77,6 +80,7 @@
         "datagrip.desktop"
         "com.obsproject.Studio.desktop"
         "onlyoffice-desktopeditors.desktop"
+        "proton-pass.desktop"
       ];
     };
 
@@ -116,8 +120,17 @@
     };
     "org/gnome/desktop/a11y/magnifier" = {
       mag-factor = 2.0;
-      mouse-tracking-mode = "edge";
+      mouse-tracking-mode = "push";
       scroll-wheel-zoom = true;
+      # Performance optimizations
+      cross-hairs-clip = false;
+      cross-hairs-length = 4096;
+      cross-hairs-opacity = 0.66;
+      cross-hairs-thickness = 8;
+      # Push content around settings
+      scroll-at-edges = true;
+      # Lens mode for better performance
+      screen-position = "full-screen";
     };
     "org/gnome/desktop/interface" = {
       cursor-theme = "Bibata-Modern-Ice";
@@ -125,9 +138,14 @@
       color-scheme = "prefer-dark";
     };
 
-    # Enable fractional scaling options
+    # Enable fractional scaling options and performance optimizations
     "org/gnome/mutter" = {
       experimental-features = [ "scale-monitor-framebuffer" ];
+      # Performance optimizations for zoom
+      dynamic-workspaces = false;
+      edge-tiling = true;
+      # Reduce animations for better zoom performance
+      animation-factor = 0.5;
     };
     "org/gnome/desktop/wm/preferences" = {
       button-layout = "appmenu:minimize,maximize,close";
@@ -139,11 +157,6 @@
       sleep-inactive-ac-type = "nothing";
       sleep-inactive-battery-type = "nothing";
       power-button-action = "nothing";
-    };
-
-    # Audio settings - disable automatic microphone adjustment
-    "org/gnome/settings-daemon/plugins/media-keys" = {
-      mic-mute = [ "<Super>m" ];
     };
 
     # Disable automatic input level adjustment
@@ -158,6 +171,39 @@
       "daemon/default-sample-format" = "s16le";
       "daemon/default-sample-rate" = lib.hm.gvariant.mkUint32 48000;
       "daemon/default-sample-channels" = lib.hm.gvariant.mkUint32 2;
+    };
+
+    # Custom keybindings for zoom and performance
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
+      binding = "<Super><Alt>0";
+      command = "gsettings set org.gnome.desktop.a11y.magnifier mag-factor 1.0";
+      name = "Reset Zoom";
+    };
+
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
+      binding = "<Super><Alt>3";
+      command = "gsettings set org.gnome.desktop.a11y.magnifier mag-factor 3.0";
+      name = "Zoom 3x";
+    };
+
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+      binding = "<Super><Alt>2";
+      command = "gsettings set org.gnome.desktop.a11y.magnifier mag-factor 1.5";
+      name = "Zoom 1.5x";
+    };
+
+    # Audio settings and custom keybindings
+    "org/gnome/settings-daemon/plugins/media-keys" = {
+      mic-mute = [ "<Super>m" ];
+      # Zoom hotkeys
+      magnifier = [ "<Super>z" ];
+      magnifier-zoom-in = [ "<Super>plus" ];
+      magnifier-zoom-out = [ "<Super>minus" ];
+      custom-keybindings = [
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/"
+      ];
     };
   };
 

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, ... }: # Reverted 'lib' argument
 
 {
   # Development packages
@@ -13,6 +13,7 @@
     dotnet-sdk_9
     gcc
     clang
+
 
     # Package Managers & Build Tools
     ## JavaScript/Node.js
@@ -82,4 +83,5 @@
 
   # Services
   services.jenkins.enable = true;
+
 }

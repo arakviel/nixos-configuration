@@ -201,8 +201,8 @@ sudo parted /dev/nvme1n1 -- mklabel gpt
 # Create partitions
 sudo parted /dev/nvme1n1 -- mkpart primary fat32 1MiB 1GiB
 sudo parted /dev/nvme1n1 -- set 1 esp on
-sudo parted /dev/nvme1n1 -- mkpart primary ext4 1GiB 100%
-sudo parted /dev/nvme1n1 -- mkpart primary linux-swap 100% -16GiB # 16GB swap partition
+sudo parted /dev/nvme1n1 -- mkpart primary ext4 1GiB 936.9GB
+sudo parted /dev/nvme1n1 -- mkpart primary linux-swap 936.9GB 953.9GB # 16GB swap partition
 
 # Format partitions
 sudo mkfs.vfat -F 32 /dev/nvme1n1p1
